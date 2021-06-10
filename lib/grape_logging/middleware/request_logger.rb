@@ -1,3 +1,4 @@
+require 'grape/middleware/helpers'
 require 'grape/middleware/base'
 
 module GrapeLogging
@@ -137,7 +138,7 @@ module GrapeLogging
       def collect_parameters
         parameters.tap do |params|
           @included_loggers.each do |logger|
-            params.merge! logger.parameters(request, response_body) do |_, oldval, newval|
+            params.merge! logger.parameters(request, response_body, response_status: response_status) do |_, oldval, newval|
               oldval.respond_to?(:merge) ? oldval.merge(newval) : newval
             end
           end
